@@ -533,7 +533,10 @@ class MatplotlibRenderer:
             ax.set_ylim(ylim)
         
         # Grid
-        ax.grid(y_config.show_grid, alpha=0.3)
+        if y_config.show_grid:
+            ax.grid(True, alpha=0.3)
+        else:
+            ax.grid(False)
     
     def _configure_secondary_axis(self, ax, y_config) -> None:
         """Configure secondary Y axis."""

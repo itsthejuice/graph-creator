@@ -157,4 +157,18 @@ class DataLoader:
             df=df,
             source_type="manual",
         )
+    
+    @staticmethod
+    def create_blank_data() -> DataSource:
+        """Create blank/minimal data for new graphs."""
+        df = pd.DataFrame({
+            'X': [0],
+            'Y': [0],
+        })
+        
+        return DataSource(
+            name="Blank",
+            df=df,
+            source_type="manual",
+        )
 

@@ -284,10 +284,11 @@ class GraphCreatorApp:
     
     def _on_config_change(self):
         """Handle configuration change."""
-        self.state.save_snapshot()
-        if self.state.auto_render:
-            self.canvas.render()
-        self.builder.refresh()
+        # Save snapshot is handled by individual handlers that need it
+        # Always render for real-time updates
+        self.canvas.render()
+        # Update page to show changes
+        self.page.update()
     
     def _refresh_ui(self):
         """Refresh entire UI."""
@@ -332,11 +333,27 @@ class GraphCreatorApp:
                     x_column="Sample",
                 )
                 self._auto_create_series()
+                
+            elif example_type == "blank":
+                # Create a blank chart with minimal example data
+                data_source = DataLoader.create_blank_data()
+                self.state.data_source = data_source
+                self.state.chart_config = ChartConfig(
+                    chart_type="line",
+                    title="New Graph",
+                    subtitle="",
+                    x_column="X",  # Set default X column
+                )
+                # Explicitly clear any auto-created series for blank charts
+                self.state.chart_config.series_styles.clear()
             
             self.state.save_snapshot()
             self._refresh_ui()
             
-            self._show_success("Example Loaded", f"Loaded {example_type} example successfully")
+            if example_type != "blank":
+                self._show_success("Example Loaded", f"Loaded {example_type} example successfully")
+            else:
+                self._show_success("Blank Graph", "Created new blank graph. Import data to begin.")
         
         except Exception as e:
             logger.error(f"Error loading example: {e}")
@@ -383,6 +400,8 @@ class GraphCreatorApp:
                 allowed_extensions=["graphproj", "json"],
                 on_result=self._on_project_picked,
             )
+        elif source_type == "export_csv":
+            self._export_data()
     
     def _on_csv_picked(self, e: ft.FilePickerResultEvent):
         """Handle CSV file picked."""
