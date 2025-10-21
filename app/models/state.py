@@ -14,6 +14,21 @@ from .data_models import (
 )
 
 
+def _default_dark_theme():
+    """Create default dark theme."""
+    return Theme(
+        name="dark",
+        mode="dark",
+        background_color="#0C1A26",
+        grid_color="#18324A",
+        text_color="#E8EEF3",
+        color_palette=[
+            "#3A82F7", "#4E9FB9", "#3DBE8B", "#E3A65A", "#C05555",
+            "#7B61FF", "#FF6B9D", "#FFB84D", "#4ECDC4", "#95E1D3"
+        ],
+    )
+
+
 @dataclass
 class AppState:
     """Main application state with undo/redo support."""
@@ -22,7 +37,7 @@ class AppState:
     data_source: Optional[DataSource] = None
     transforms: List[Transform] = field(default_factory=list)
     chart_config: ChartConfig = field(default_factory=ChartConfig)
-    theme: Theme = field(default_factory=Theme)
+    theme: Theme = field(default_factory=_default_dark_theme)
     
     # UI state
     use_interactive_preview: bool = False

@@ -25,9 +25,19 @@ class Canvas(ft.Container):
         
         # Build UI
         self.chart_image = ft.Image(
-            src="",
+            src_base64="",
             fit=ft.ImageFit.CONTAIN,
             repeat=ft.ImageRepeat.NO_REPEAT,
+            visible=False,
+        )
+        
+        self.placeholder_text = ft.Container(
+            content=ft.Column([
+                ft.Icon(ft.icons.INSERT_CHART_OUTLINED, size=64, color=ft.colors.OUTLINE),
+                ft.Text("No data loaded", size=16, color=ft.colors.OUTLINE),
+                ft.Text("Load an example or import data", size=12, color=ft.colors.OUTLINE),
+            ], horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=10),
+            alignment=ft.alignment.center,
         )
         
         self.status_bar = ft.Container(
@@ -38,10 +48,15 @@ class Canvas(ft.Container):
             padding=8,
         )
         
+        self.chart_container = ft.Stack([
+            self.placeholder_text,
+            self.chart_image,
+        ], expand=True)
+        
         content = ft.Column([
             self._build_toolbar(),
             ft.Container(
-                content=self.chart_image,
+                content=self.chart_container,
                 expand=True,
                 alignment=ft.alignment.center,
                 bgcolor=ft.colors.SURFACE,
@@ -119,6 +134,8 @@ class Canvas(ft.Container):
             # Convert to base64 for display
             img_base64 = base64.b64encode(img_bytes).decode()
             self.chart_image.src_base64 = img_base64
+            self.chart_image.visible = True
+            self.placeholder_text.visible = False
             
             # Update status bar
             self._update_status(metadata)
@@ -135,7 +152,8 @@ class Canvas(ft.Container):
     
     def _show_placeholder(self, message: str):
         """Show placeholder message."""
-        self.chart_image.src_base64 = ""
+        self.chart_image.visible = False
+        self.placeholder_text.visible = True
         self.status_bar.content = ft.Row([
             ft.Icon(ft.icons.INFO_OUTLINE, size=16),
             ft.Text(message, size=11),
@@ -146,7 +164,8 @@ class Canvas(ft.Container):
     
     def _show_error(self, error: str):
         """Show error message."""
-        self.chart_image.src_base64 = ""
+        self.chart_image.visible = False
+        self.placeholder_text.visible = True
         self.status_bar.content = ft.Row([
             ft.Icon(ft.icons.ERROR_OUTLINE, size=16, color=ft.colors.ERROR),
             ft.Text(f"Error: {error}", size=11, color=ft.colors.ERROR),
@@ -167,7 +186,7 @@ class Canvas(ft.Container):
             status_text += f" • {len(warnings)} warning(s)"
         
         self.status_bar.content = ft.Row([
-            ft.Icon(ft.icons.CHECK_CIRCLE, size=16, color=ft.colors.SUCCESS),
+            ft.Icon(ft.icons.CHECK_CIRCLE, size=16, color=ft.colors.GREEN),
             ft.Text(status_text, size=11),
         ])
         

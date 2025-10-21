@@ -3,6 +3,7 @@
 import io
 from typing import Optional
 import pandas as pd
+import numpy as np
 from datetime import datetime
 
 from ..models.data_models import DataSource
@@ -109,9 +110,9 @@ class DataLoader:
         
         df = pd.DataFrame({
             'Date': dates,
-            'Metric A': 100 + pd.Series(range(100)) * 0.5 + pd.Series(range(100)).apply(lambda x: 10 * pd.np.sin(x / 10)),
-            'Metric B': 80 + pd.Series(range(100)) * 0.3 + pd.Series(range(100)).apply(lambda x: 8 * pd.np.cos(x / 15)),
-            'Metric C': 120 + pd.Series(range(100)) * 0.2 + pd.Series(range(100)).apply(lambda x: 5 * pd.np.sin(x / 8)),
+            'Metric A': 100 + pd.Series(range(100)) * 0.5 + pd.Series(range(100)).apply(lambda x: 10 * np.sin(x / 10)),
+            'Metric B': 80 + pd.Series(range(100)) * 0.3 + pd.Series(range(100)).apply(lambda x: 8 * np.cos(x / 15)),
+            'Metric C': 120 + pd.Series(range(100)) * 0.2 + pd.Series(range(100)).apply(lambda x: 5 * np.sin(x / 8)),
         })
         
         return DataSource(
@@ -127,9 +128,9 @@ class DataLoader:
         
         df = pd.DataFrame({
             'Date': dates,
-            'GDP (Billions)': 20000 + pd.Series(range(48)) * 100 + pd.Series(range(48)).apply(lambda x: 500 * pd.np.sin(x / 6)),
-            'Unemployment (%)': 5 + pd.Series(range(48)).apply(lambda x: 2 * pd.np.sin(x / 8 + 1)),
-            'Interest Rate (%)': 2 + pd.Series(range(48)).apply(lambda x: 1.5 * pd.np.cos(x / 10)),
+            'GDP (Billions)': 20000 + pd.Series(range(48)) * 100 + pd.Series(range(48)).apply(lambda x: 500 * np.sin(x / 6)),
+            'Unemployment (%)': 5 + pd.Series(range(48)).apply(lambda x: 2 * np.sin(x / 8 + 1)),
+            'Interest Rate (%)': 2 + pd.Series(range(48)).apply(lambda x: 1.5 * np.cos(x / 10)),
         })
         
         return DataSource(

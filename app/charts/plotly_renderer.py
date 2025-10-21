@@ -1,5 +1,7 @@
 """Optional Plotly-based interactive chart renderer."""
 
+from __future__ import annotations
+
 from typing import Optional, Tuple, Dict, Any
 import pandas as pd
 

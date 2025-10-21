@@ -67,22 +67,24 @@ class MatplotlibRenderer:
         
         # Set titles
         if config.title:
-            title_y = 0.98 if config.subtitle else 1.0
+            title_y = 1.02 if config.subtitle else 1.0
             ax1.set_title(
                 config.title,
                 fontsize=theme.title_font_size,
                 fontweight='bold',
-                pad=20,
+                pad=30 if config.subtitle else 20,
                 y=title_y,
             )
         
         if config.subtitle:
             fig.text(
-                0.5, 0.96,
+                0.5, 0.98,
                 config.subtitle,
                 ha='center',
-                fontsize=theme.font_size,
+                fontsize=theme.font_size - 1,
                 style='italic',
+                color=theme.text_color,
+                alpha=0.8,
             )
         
         # Configure axes

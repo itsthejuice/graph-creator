@@ -28,11 +28,14 @@ class GraphCreatorApp:
         self.page = page
         self.state = AppState()
         self.file_picker = FilePickerDialog(page)
+        self.is_dark_mode = True  # Dark mode by default
         
         # Configure page
         page.title = "Graph Creator"
-        page.theme_mode = ft.ThemeMode.LIGHT
         page.padding = 0
+        
+        # Setup custom themes
+        self._setup_themes()
         
         # Setup keyboard shortcuts
         page.on_keyboard_event = self._handle_keyboard
@@ -45,6 +48,123 @@ class GraphCreatorApp:
         
         # Add state listener
         self.state.add_listener(self._on_state_change)
+    
+    def _setup_themes(self):
+        """Setup custom dark and light themes."""
+        # Dark theme colors
+        dark_colors = {
+            'primary': '#3A82F7',
+            'on_primary': '#E8EEF3',
+            'primary_container': '#122738',
+            'on_primary_container': '#E8EEF3',
+            'secondary': '#4E9FB9',
+            'on_secondary': '#E8EEF3',
+            'secondary_container': '#18324A',
+            'on_secondary_container': '#E8EEF3',
+            'background': '#0C1A26',
+            'on_background': '#E8EEF3',
+            'surface': '#122738',
+            'on_surface': '#E8EEF3',
+            'surface_variant': '#18324A',
+            'on_surface_variant': '#A5B3C0',
+            'outline': '#4E9FB9',
+            'error': '#C05555',
+            'on_error': '#E8EEF3',
+        }
+        
+        # Light theme colors
+        light_colors = {
+            'primary': '#2F6BDB',
+            'on_primary': '#FFFFFF',
+            'primary_container': '#E4EBF0',
+            'on_primary_container': '#1E2B36',
+            'secondary': '#5FA7D3',
+            'on_secondary': '#FFFFFF',
+            'secondary_container': '#E4EBF0',
+            'on_secondary_container': '#1E2B36',
+            'background': '#F6F9FB',
+            'on_background': '#1E2B36',
+            'surface': '#E4EBF0',
+            'on_surface': '#1E2B36',
+            'surface_variant': '#FFFFFF',
+            'on_surface_variant': '#4B5E70',
+            'outline': '#5FA7D3',
+            'error': '#B23C3C',
+            'on_error': '#FFFFFF',
+        }
+        
+        self.page.theme = ft.Theme(
+            color_scheme_seed=dark_colors['primary'],
+            color_scheme=ft.ColorScheme(
+                primary=dark_colors['primary'],
+                on_primary=dark_colors['on_primary'],
+                primary_container=dark_colors['primary_container'],
+                on_primary_container=dark_colors['on_primary_container'],
+                secondary=dark_colors['secondary'],
+                on_secondary=dark_colors['on_secondary'],
+                secondary_container=dark_colors['secondary_container'],
+                on_secondary_container=dark_colors['on_secondary_container'],
+                background=dark_colors['background'],
+                on_background=dark_colors['on_background'],
+                surface=dark_colors['surface'],
+                on_surface=dark_colors['on_surface'],
+                surface_variant=dark_colors['surface_variant'],
+                on_surface_variant=dark_colors['on_surface_variant'],
+                outline=dark_colors['outline'],
+                error=dark_colors['error'],
+                on_error=dark_colors['on_error'],
+            ),
+        )
+        
+        self.page.dark_theme = ft.Theme(
+            color_scheme_seed=dark_colors['primary'],
+            color_scheme=ft.ColorScheme(
+                primary=dark_colors['primary'],
+                on_primary=dark_colors['on_primary'],
+                primary_container=dark_colors['primary_container'],
+                on_primary_container=dark_colors['on_primary_container'],
+                secondary=dark_colors['secondary'],
+                on_secondary=dark_colors['on_secondary'],
+                secondary_container=dark_colors['secondary_container'],
+                on_secondary_container=dark_colors['on_secondary_container'],
+                background=dark_colors['background'],
+                on_background=dark_colors['on_background'],
+                surface=dark_colors['surface'],
+                on_surface=dark_colors['on_surface'],
+                surface_variant=dark_colors['surface_variant'],
+                on_surface_variant=dark_colors['on_surface_variant'],
+                outline=dark_colors['outline'],
+                error=dark_colors['error'],
+                on_error=dark_colors['on_error'],
+            ),
+        )
+        
+        # Light theme (for when user toggles)
+        self.light_theme = ft.Theme(
+            color_scheme_seed=light_colors['primary'],
+            color_scheme=ft.ColorScheme(
+                primary=light_colors['primary'],
+                on_primary=light_colors['on_primary'],
+                primary_container=light_colors['primary_container'],
+                on_primary_container=light_colors['on_primary_container'],
+                secondary=light_colors['secondary'],
+                on_secondary=light_colors['on_secondary'],
+                secondary_container=light_colors['secondary_container'],
+                on_secondary_container=light_colors['on_secondary_container'],
+                background=light_colors['background'],
+                on_background=light_colors['on_background'],
+                surface=light_colors['surface'],
+                on_surface=light_colors['on_surface'],
+                surface_variant=light_colors['surface_variant'],
+                on_surface_variant=light_colors['on_surface_variant'],
+                outline=light_colors['outline'],
+                error=light_colors['error'],
+                on_error=light_colors['on_error'],
+            ),
+        )
+        
+        # Set dark mode by default
+        self.page.theme_mode = ft.ThemeMode.DARK
     
     def _build_ui(self):
         """Build the main UI."""
@@ -61,14 +181,79 @@ class GraphCreatorApp:
             on_export=self._export,
         )
         
-        # Create layout
-        content = ft.Row([
+        # Create theme toggle button
+        self.theme_toggle = ft.IconButton(
+            icon=ft.icons.DARK_MODE if self.is_dark_mode else ft.icons.LIGHT_MODE,
+            icon_size=20,
+            tooltip="Toggle Light/Dark Mode",
+            on_click=self._toggle_theme,
+        )
+        
+        # Create header with title and theme toggle
+        header = ft.Container(
+            content=ft.Row([
+                ft.Text("Graph Creator", size=20, weight=ft.FontWeight.BOLD),
+                ft.Row([self.theme_toggle], spacing=0),
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            padding=ft.padding.symmetric(horizontal=20, vertical=10),
+            bgcolor=ft.colors.SURFACE_VARIANT,
+        )
+        
+        # Create main layout
+        main_content = ft.Row([
             self.builder,
             ft.VerticalDivider(width=1),
             self.canvas,
         ], spacing=0, expand=True)
         
-        self.page.add(content)
+        # Add everything to page
+        self.page.add(
+            ft.Column([
+                header,
+                main_content,
+            ], spacing=0, expand=True)
+        )
+    
+    def _toggle_theme(self, e):
+        """Toggle between light and dark modes."""
+        self.is_dark_mode = not self.is_dark_mode
+        
+        if self.is_dark_mode:
+            self.page.theme_mode = ft.ThemeMode.DARK
+            self.theme_toggle.icon = ft.icons.DARK_MODE
+            # Update chart theme to dark
+            from .models.data_models import Theme
+            self.state.theme = Theme(
+                name="dark",
+                mode="dark",
+                background_color="#0C1A26",
+                grid_color="#18324A",
+                text_color="#E8EEF3",
+                color_palette=[
+                    "#3A82F7", "#4E9FB9", "#3DBE8B", "#E3A65A", "#C05555",
+                    "#7B61FF", "#FF6B9D", "#FFB84D", "#4ECDC4", "#95E1D3"
+                ],
+            )
+        else:
+            self.page.theme_mode = ft.ThemeMode.LIGHT
+            self.page.theme = self.light_theme
+            self.theme_toggle.icon = ft.icons.LIGHT_MODE
+            # Update chart theme to light
+            from .models.data_models import Theme
+            self.state.theme = Theme(
+                name="light",
+                mode="light",
+                background_color="#F6F9FB",
+                grid_color="#E4EBF0",
+                text_color="#1E2B36",
+                color_palette=[
+                    "#2F6BDB", "#5FA7D3", "#2C8C64", "#C97A2C", "#B23C3C",
+                    "#6B4EFF", "#FF4D7D", "#FF9B3D", "#3EAAA0", "#75C9B9"
+                ],
+            )
+        
+        # Re-render the chart with new theme
+        self._refresh_ui()
     
     def _handle_keyboard(self, e: ft.KeyboardEvent):
         """Handle keyboard shortcuts."""
