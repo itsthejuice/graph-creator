@@ -19,6 +19,11 @@ dependencies = [
     "openpyxl==3.1.2",
 ]
 
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+exclude = ["tests*", "assets*"]
+
 [project.optional-dependencies]
 interactive = [
     "plotly==5.18.0",

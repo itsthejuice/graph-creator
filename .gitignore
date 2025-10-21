@@ -26,6 +26,9 @@ env/
 ENV/
 .venv
 
+# Setup marker
+.setup_complete
+
 # IDEs
 .vscode/
 .idea/

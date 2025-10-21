@@ -14,9 +14,34 @@ A fully offline, highly customizable chart creation application built with Flet 
 
 ## Installation
 
+### Quick Start (Recommended)
+
+The easiest way to run Graph Creator is using the automated setup script:
+
 ```bash
-# Clone or navigate to the project directory
 cd graph-creator
+./run.sh
+```
+
+This script will automatically:
+- ✅ Check Python version (3.11+)
+- ✅ Create a virtual environment (if needed)
+- ✅ Install all dependencies (if needed)
+- ✅ Run the application
+
+On subsequent runs, it skips setup steps if already completed.
+
+### Manual Installation
+
+If you prefer manual installation:
+
+```bash
+# Navigate to the project directory
+cd graph-creator
+
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
 
 # Install dependencies
 pip install -e .
@@ -30,8 +55,29 @@ pip install -e ".[dev]"
 
 ## Running the Application
 
+### Using the run script (Recommended)
+
 ```bash
+./run.sh
+```
+
+### Manual execution
+
+```bash
+# Activate virtual environment first
+source venv/bin/activate
+
+# Run the application
 python -m app.main
+```
+
+## Script Options
+
+```bash
+./run.sh              # Run the application (auto-setup)
+./run.sh --clean      # Remove venv and setup marker
+./run.sh --reinstall  # Force reinstall dependencies
+./run.sh --help       # Show help message
 ```
 
 ## Keyboard Shortcuts

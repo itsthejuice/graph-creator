@@ -8,15 +8,42 @@
 
 ## Step-by-Step Installation
 
-### 1. Navigate to Project Directory
+### Quick Start (Recommended)
+
+The **easiest and recommended** way to install and run Graph Creator:
+
+```bash
+cd /home/admin/Projects/graph-creator
+./run.sh
+```
+
+**That's it!** The script automatically:
+1. ✅ Checks Python 3.11+ is installed
+2. ✅ Creates virtual environment (venv/)
+3. ✅ Installs all dependencies
+4. ✅ Launches the application
+5. ✅ Skips setup on subsequent runs
+
+### Manual Installation
+
+If you prefer manual control:
+
+#### 1. Navigate to Project Directory
 
 ```bash
 cd /home/admin/Projects/graph-creator
 ```
 
-### 2. Install Dependencies
+#### 2. Create Virtual Environment
 
-#### Option A: Standard Installation (Recommended)
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+#### 3. Install Dependencies
+
+**Option A: Standard Installation (Recommended)**
 
 ```bash
 pip install -e .
@@ -31,7 +58,7 @@ This installs:
 - scipy (scientific computing)
 - openpyxl (Excel support)
 
-#### Option B: With Interactive Features
+**Option B: With Interactive Features**
 
 ```bash
 pip install -e ".[interactive]"
@@ -41,7 +68,7 @@ Adds:
 - plotly (interactive charts)
 - kaleido (Plotly export)
 
-#### Option C: With Development Tools
+**Option C: With Development Tools**
 
 ```bash
 pip install -e ".[dev]"
@@ -51,13 +78,13 @@ Adds:
 - pytest (testing)
 - pytest-cov (coverage)
 
-#### Option D: Everything
+**Option D: Everything**
 
 ```bash
 pip install -e ".[interactive,dev]"
 ```
 
-### 3. Verify Installation
+#### 4. Verify Installation
 
 ```bash
 python -c "import flet, matplotlib, pandas, numpy; print('All dependencies installed successfully!')"
